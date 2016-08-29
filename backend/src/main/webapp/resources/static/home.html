@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Video Background</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style type="text/css">
+			
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.background-wrap {
+				position: fixed;
+				top: 0;
+				left: 0;
+				z-index: -1000;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+
+			}
+			
+			#video-bg-elem {
+				position: absolute;
+				top: 0;
+				left: 0;
+				min-height: 100%;
+				min-width: 100%;
+				background-size:cover;
+			}
+
+
+			.content {
+				position: absolute;
+				width: 100%;
+				min-height: 100%;
+				z-index: 1000;
+				background-color: rgba(61,63,64,0.3);
+			}
+			.content h1 {
+				text-align: center;
+				font-size: 65px;
+				font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+				text-transform: capitalize;
+				font-weight: 250;
+				color: #fff;
+				padding-top: 15%;
+				margin-bottom: 10px;
+			}
+			<!--.content p {-->
+				<!--text-align: center;-->
+				<!--font-size: 20px;-->
+				<!--letter-spacing: 3px;-->
+				<!--color: #aaa;-->
+			<!--}-->
+			.opaque-navbar {
+			background-color: rgba(0,0,0,0);
+			height: 60px;
+			border-bottom: 0px;
+			transition: background-color .5s ease 0s;
+			}
+
+			form {
+			margin-left:auto;
+			margin-right:auto;
+			width: 343px;
+			height: 333px;
+			padding:30px;
+			text-align: center;
+			overflow: hidden;
+			}
+
+			input {
+			border: none;
+			outline: none;
+			border-radius: 0;
+			text-align: center;
+			background: none;
+			font-weight: 300;
+			font-family: Consolas, monaco, monospace;
+			font-size: 15px;
+			color: rgba(255, 255, 255, 1);
+			min-width: 100%;
+			padding: 1rem;
+			border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+			box-sizing: border-box;
+			cursor: text;
+			}
+
+			::-webkit-input-placeholder {
+			text-align: center;
+			color: rgba(255, 255, 255, 0.4);
+			font-style: italic;
+			font-weight: 400;
+			}
+
+			:-moz-placeholder {
+			/* Firefox 18- */
+
+			text-align: center;
+			color: rgba(255, 255, 255, 0.4);
+			font-style: italic;
+			font-weight: 400;
+			}
+
+			::-moz-placeholder {
+			/* Firefox 19+ */
+
+			text-align: center;
+			color: rgba(255, 255, 255, 0.4);
+			font-style: italic;
+			font-weight: 400;
+			}
+
+			:-ms-input-placeholder {
+			text-align: center;
+			color: rgba(255, 255, 255, 0.4);
+			font-style: italic;
+			font-weight: 400;
+			}
+
+			button {
+			background: none;
+			border: none;
+			outline: none;
+			text-align:center;
+			margin: 2vmax;
+			}
+
+			button:hover small {
+			opacity: 1;
+			}
+
+			.send-icn {
+			fill: rgba(255, 255, 255, 1)
+			}
+
+			.send-icn:hover {
+			fill: rgba(255, 255, 153, 1);
+			cursor: pointer;
+			}
+
+			small {
+			display: block;
+			color:rgb(255, 255, 153);
+			opacity: 0;
+			}
+			
+		</style>
+		
+		
+	</head>
+	<body>
+		<!--nav bar-->
+		<div class="navbar navbar-inverse navbar-fixed-top opaque-navbar">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navMain">
+						<span class="glyphicon glyphicon-chevron-right" style="color:white;border:none;"></span>
+
+					</button>
+					<a class="navbar-brand" href="#" style="font-family: Papyrus, fantasy;">Trip4U</a>
+				</div>
+				<div class="collapse navbar-collapse" id="navMain">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><span class="glyphicon glyphicon-log-in">Login</span></a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-user">SignUp</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!--background-->
+		<div class="background-wrap">
+			<video id="video-bg-elem" preload="auto" autoplay="true" loop="loop" muted="muted" poster="video/bgpic_video.jpg">
+				<source src="video/bgvideo_final.mp4" type="video/mp4">
+			</video>          
+		</div>
+
+		<!--content-->
+		<div class="content">         
+			<h1>Customize Perfect Trips</h1>
+			<form>
+				<input type="text" id="destination" placeholder="Enter your destination" required>
+				<input type="text" id="day" placeholder="Enter travel days">
+				<p>
+					<button type="submit">
+						<svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">
+        <path d="M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3
+	l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z" />
+      </svg>
+						<small>start</small>
+					</button>
+				</p>
+			</form>
+		</div>
+
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
