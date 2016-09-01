@@ -13,7 +13,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Welcome to Trip4U, we can make a personal travel plan for you.">
     <meta name="author" content="">
-    <title>Log in with your account</title>
+    <title>Trip4U -- Welcom</title>
     <link href="${contextPath}/resources/css/homepage.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -34,12 +34,12 @@
 						<span class="glyphicon glyphicon-chevron-right" style="color:white;border:none;"></span>
 
 					</button>
-					<a class="navbar-brand" href="#" style="font-family: Papyrus, fantasy;">Trip4U</a>
+					<a class="navbar-brand" href="/home" style="font-family: Papyrus, fantasy;">Trip4U</a>
 				</div>
 				<div class="collapse navbar-collapse" id="navMain">
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#"><span class="glyphicon glyphicon-log-in">Login</span></a></li>
-						<li><a href="#"><span class="glyphicon glyphicon-user">SignUp</span></a></li>
+						<li><a href="/login"><span class="glyphicon glyphicon-log-in">Login</span></a></li>
+						<li><a href="/registration"><span class="glyphicon glyphicon-user">SignUp</span></a></li>
 					</ul>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 
 		<!--background-->
 		<div class="background-wrap">
-			<video id="video-bg-elem" preload="auto" autoplay="true" loop="loop" muted="muted" poster="${contextPath}/resources/static/video/bgpic_video.jpg">
+			<video id="video-bg-elem" preload="auto" autoplay muted loop="loop" poster="${contextPath}/resources/static/video/bgpic_video.jpg">
 				<source src="${contextPath}/resources/static/video/bgvideo_final.mp4" type="video/mp4">
 			</video>
 		</div>
