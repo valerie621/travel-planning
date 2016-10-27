@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -13,7 +14,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Welcome to Trip4U, we can make a personal travel plan for you.">
     <meta name="author" content="">
-    <title>Trip4U -- Welcom</title>
+    <title>Trip4U -- Welcome</title>
     <link href="${contextPath}/resources/css/homepage.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -44,7 +45,6 @@
 				</div>
 			</div>
 		</div>
-
 		<!--background-->
 		<div class="background-wrap">
 			<video id="video-bg-elem" preload="auto" autoplay muted loop="loop" poster="${contextPath}/resources/static/video/bgpic_video.jpg">
@@ -55,7 +55,7 @@
 		<!--content-->
 		<div class="content">
 			<h1>Customize Perfect Trips</h1>
-			<form>
+			<form action="/mapdetail" method="get">
 				<input type="text" id="destination" placeholder="Enter your destination" required>
 				<input type="text" id="day" placeholder="Enter travel days">
 				<p>
