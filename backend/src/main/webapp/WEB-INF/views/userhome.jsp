@@ -55,9 +55,9 @@
 <!--content-->
 <div class="content">
     <h1>Customize Perfect Trips</h1>
-    <form>
-        <input type="text" id="destination" placeholder="Enter your destination" required>
-        <input type="text" id="day" placeholder="Enter travel days">
+    <form action="/mapdetail" method="get">
+        <input type="text" name="destination" id="destination" placeholder="Enter your destination" required>
+        <input type="text" name="day" id="day" placeholder="Enter travel days">
         <p>
             <button type="submit">
                 <svg version="1.1" class="send-icn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="36px" viewBox="0 0 100 36" enable-background="new 0 0 100 36" xml:space="preserve">

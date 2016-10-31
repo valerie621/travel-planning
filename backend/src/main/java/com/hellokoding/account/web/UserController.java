@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.*;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.hellokoding.account.model.Location;
+import net.sf.json.JSONObject;
+import com.hellokoding.account.model.Path;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +54,7 @@ public class UserController {
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/home";
+        return "redirect:/userhome";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -83,14 +89,42 @@ public class UserController {
         return "home";
     }
 
-    @RequestMapping(value = {"/welcome"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/userhome"}, method = RequestMethod.GET)
     public String home(Model model) {
-        return "welcome";
+        return "userhome";
     }
 
     @RequestMapping(value = {"/mapdetail"}, method = RequestMethod.GET)
-    public String mapdetail(Model model) {
-        return "mapdetail";
+    public String mapdetail(Model model, @RequestParam("destination") String destination, @RequestParam("day") String day) {
+        int daytime = Integer.parseInt(day);
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = 1; i <= daytime; ++i) {
+            list.add(i);
+        }
+        //model.addAttribute("travelPeriod", list);
+        HashMap<String, List<Location>> location = new HashMap<>();
+        List<Location> location_list = new ArrayList<Location>();
+        List<List<Path>> path = new ArrayList<>();
+        location_list.add(new Location("Bondi Beach", -33.890542, 151.274856, 4));
+        location_list.add(new Location("Coogee Beach", -33.923036, 151.259052, 5));
+        location_list.add(new Location("Cronulla Beach", -34.028249, 151.157507, 3));
+        location_list.add(new Location("Manly Beach", -33.80010128657071, 151.28747820854187, 2));
+        location_list.add(new Location("Maroubra Beach", -33.950198, 151.259302, 1));
+        List<Path> temp = new ArrayList<>();
+        for (int i = 0; i < location_list.size() - 1; ++i) {
+            String name = location_list.get(i).getName() + " to " + location_list.get(i + 1).getName();
+            String start = "" + i;
+            String end = "" + (i + 1);
+            temp.add(new Path(name, start, end));
+        }
+        for (int i= 1; i <= 5; ++i) {
+              location.put(i + "", location_list);
+              path.add(temp);
+        }
+        JSONObject jsonObject = JSONObject.fromObject(location);
+        model.addAttribute("locationInfo", jsonObject);
+        model.addAttribute("path", path);
+        return "mapdetailtest";
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
