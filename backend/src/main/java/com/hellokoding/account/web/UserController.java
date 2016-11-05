@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/mapdetail"}, method = RequestMethod.GET)
-    public String mapdetail(Model model, @RequestParam("destination") String destination, @RequestParam("day") String day) {
+    public String mapdetail(Model model, @RequestParam("destination") String destination, @RequestParam(value="day", required = false, defaultValue = "3") String day) {
         int daytime = Integer.parseInt(day);
         List<Integer> list = new ArrayList<Integer>();
         for (int i = 1; i <= daytime; ++i) {
@@ -111,19 +111,22 @@ public class UserController {
         location_list.add(new Location("Manly Beach", -33.80010128657071, 151.28747820854187, 2));
         location_list.add(new Location("Maroubra Beach", -33.950198, 151.259302, 1));
         List<Path> temp = new ArrayList<>();
+        String Description = "Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.";
         for (int i = 0; i < location_list.size() - 1; ++i) {
             String name = location_list.get(i).getName() + " to " + location_list.get(i + 1).getName();
             String start = "" + i;
             String end = "" + (i + 1);
-            temp.add(new Path(name, start, end));
+            temp.add(new Path(name, start, location_list.get(i).getName(), end, location_list.get(i + 1).getName(), "one hour", Description, Description));
         }
-        for (int i= 1; i <= 5; ++i) {
+        for (int i= 1; i <= Integer.parseInt(day); ++i) {
               location.put(i + "", location_list);
               path.add(temp);
         }
         JSONObject jsonObject = JSONObject.fromObject(location);
         model.addAttribute("locationInfo", jsonObject);
         model.addAttribute("path", path);
+        model.addAttribute("destination", destination);
+        model.addAttribute("day", day);
         return "mapdetailtest";
     }
 
@@ -134,5 +137,33 @@ public class UserController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "home";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+    }
+
+    @RequestMapping(value="/flowchart", method = RequestMethod.GET)
+    public String flowchart () {
+        return "flowchart";
+    }
+
+    @RequestMapping(value="/profile", method = RequestMethod.GET)
+    public String profile () {
+        return "profile";
+    }
+
+    @RequestMapping(value ={"/delete"}, method = RequestMethod.GET)
+    public String delete(HttpServletRequest requ, HttpServletResponse resp) {
+
+        Map myModel = new HashMap();
+
+        // get the Authentication of the user who is logged in.
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        try {
+            User user = userService.findByUsername(auth.getName());
+            userService.delete(user);
+        } catch (Exception e) {
+            myModel.put("deleted", "Your account could not be deleted. Please contact our support team.");
+        }
+
+        return "home";
     }
 }

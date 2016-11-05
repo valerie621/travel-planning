@@ -36,10 +36,16 @@
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMjtjAnJSZsDgN1N7NvX7Y2ofexcLTSSc&v=3.exp&sensor=false"></script>
 <script>
+
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     google.maps.event.addDomListener(window, 'load', initialize);
+    var marks;
+    var flag;
 
 
     function initialize() {
+
+        flag = true;
 
 
         var data = JSON.parse('${locationInfo}');
@@ -70,6 +76,8 @@
         var marker, i;
         var infowindow = new google.maps.InfoWindow();
 
+        var labelIndex = 0;
+
         function renderDirections(result) {
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 suppressMarkers: true,
@@ -90,11 +98,19 @@
             });
         }
 
+        marks = [];
+
         for (i = 0; i < locations.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                label: labels[labelIndex++ % labels.length],
+                draggable: true,
+                animation: google.maps.Animation.DROP,
                 map: map
             });
+            marks.push(marker);
+            marker.addListener('click', toggleBounce);
+
             if (i < locations.length - 1) {
                 var start = new google.maps.LatLng(locations[i][1], locations[i][2]);
                 var end = new google.maps.LatLng(locations[i + 1][1], locations[i + 1][2]);
@@ -121,11 +137,14 @@
     }
 
     function newLocation(count)
+
     {
+        flag = true;
         var data = JSON.parse('${locationInfo}');
         var first = data[count];
 
         var locations = [];
+        var labelIndex = 0;
 
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -146,6 +165,8 @@
 
         var marker, i;
         var infowindow = new google.maps.InfoWindow();
+
+        marks = [];
 
         function renderDirections(result) {
             var directionsRenderer = new google.maps.DirectionsRenderer({
@@ -170,8 +191,12 @@
         for (i = 0; i < locations.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                label: labels[labelIndex++ % labels.length],
                 map: map
             });
+            marks.push(marker);
             if (i < locations.length - 1) {
                 var start = new google.maps.LatLng(locations[i][1], locations[i][2]);
                 var end = new google.maps.LatLng(locations[i + 1][1], locations[i + 1][2]);
@@ -197,15 +222,28 @@
 
     }
 
+    function toggleBounce(count, point) {
+        if (!flag) {
+            newLocation(count)
+        }
+        var marker = marks[point];
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null)
+        }, 5000);
+    }
+
     function travelDetail(count, start, end) {
+        flag = false;
         var data = JSON.parse('${locationInfo}');
         var first = data[count];
-
-        var locations = [];
 
         var map = new google.maps.Map(document.getElementById('map-canvas'), {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+
+        var locations = [];
+
             array = [];
             temp = first[start];
             array.push(temp.name);
@@ -249,12 +287,13 @@
         for (i = 0; i < locations.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                label: labels[start++ % labels.length],
                 map: map
             });
             if (i < locations.length - 1) {
-                var start = new google.maps.LatLng(locations[i][1], locations[i][2]);
-                var end = new google.maps.LatLng(locations[i + 1][1], locations[i + 1][2]);
-                requestDirections(start, end);
+                var startPoint = new google.maps.LatLng(locations[i][1], locations[i][2]);
+                var endPoint = new google.maps.LatLng(locations[i + 1][1], locations[i + 1][2]);
+                requestDirections(startPoint, endPoint);
             }
 
             bounds.extend(marker.position);
@@ -310,9 +349,21 @@
 </div>
 <div id="map-canvas"></div>
 <div class="container-fluid" id="main">
-    <div class="row">
+    <form class="row">
         <div class="col-xs-4"><!--map-canvas will be postioned here--></div>
         <div class="col-xs-8" id="right">
+
+            <div class="col-lg-6">
+                <form action="/mapdetail" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" style="width: 50%" placeholder="${destination}" name="destination" id="destination" required>
+                    <input type="text" class="form-control" style="width: 50%" placeholder="${day}" name="day" id="day">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">Go!</button>
+                     </span>
+                </div><!-- /input-group -->
+                    </form>
+            </div><!-- /.col-lg-6 -->
 
             <h2>Travel Plan Detail</h2>
 
@@ -324,19 +375,38 @@
 
 
             <p>Here is the Details of One Day Travel Plan</p>
-                <c:forEach items="${pathDetail}" var="onePath">
-                 <div>
-                    <div><a href="#" onclick="travelDetail(${loop.index + 1}, ${onePath.start}, ${onePath.end})">Path: <c:out value="${onePath.name}" /></a></div>
-                 </div>
+                <c:forEach items="${pathDetail}" var="onePath" varStatus="innerloop">
+                    <c:if test="${innerloop.index == 0}" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.start})"><c:out value="${onePath.initial}" /></a></div>
+                            <div class="card-block">
+                                <p class="card-text"><c:out value="${onePath.startPointDescription}"/></p>
+                            </div>
+                            </div>
+                    </c:if>
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-sm-2">
+                               <img class="card-img-left" src="${contextPath}/resources/static/img/downarrow2.png" alt="Card image">
+                            </div>
+                            <div class="col-sm-6">
+                        <p class="card-text" style="margin-top: 20px"><a href="#" onclick="travelDetail(${loop.index + 1}, ${onePath.start}, ${onePath.end})">TimeCost: <c:out value="${onePath.timeCost}" /></a></p>
+                                </div>
+                    </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.end})"><c:out value="${onePath.destination}" /></a></div>
+                        <div class="card-block">
+                            <p class="card-text"><c:out value="${onePath.endPointDescription}"/></p>
+                        </div>
+                    </div>
                 </c:forEach>
             <hr>
                </c:forEach>
             <!-- /item list -->
             </div>
-
+        </form>
         </div>
-
-    </div>
 <!-- end template -->
 </body>
 </html>
