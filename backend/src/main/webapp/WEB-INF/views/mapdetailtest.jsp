@@ -353,7 +353,7 @@
         <div class="col-xs-4"><!--map-canvas will be postioned here--></div>
         <div class="col-xs-8" id="right">
 
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <form action="/mapdetail" method="get">
                 <div class="input-group">
                     <input type="text" class="form-control" style="width: 50%" placeholder="${destination}" name="destination" id="destination" required>
@@ -362,7 +362,7 @@
                         <button class="btn btn-primary" type="submit">Go!</button>
                      </span>
                 </div><!-- /input-group -->
-                    </form>
+                </form>
             </div><!-- /.col-lg-6 -->
 
             <h2>Travel Plan Detail</h2>
@@ -375,33 +375,42 @@
 
 
             <p>Here is the Details of One Day Travel Plan</p>
+                <div class="timeline">
                 <c:forEach items="${pathDetail}" var="onePath" varStatus="innerloop">
                     <c:if test="${innerloop.index == 0}" >
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.start})"><c:out value="${onePath.initial}" /></a></div>
-                            <div class="card-block">
-                                <p class="card-text"><c:out value="${onePath.startPointDescription}"/></p>
+                        <div class="timeline-item">
+                            <div class="timeline-point timeline-point-default">
+                                <i class="fa fa-circle"></i>
                             </div>
-                            </div>
-                    </c:if>
-                    <div class="card-block">
-                        <div class="row">
-                            <div class="col-sm-2">
-                               <img class="card-img-left" src="${contextPath}/resources/static/img/downarrow2.png" alt="Card image">
-                            </div>
-                            <div class="col-sm-6">
-                        <p class="card-text" style="margin-top: 20px"><a href="#" onclick="travelDetail(${loop.index + 1}, ${onePath.start}, ${onePath.end})">TimeCost: <c:out value="${onePath.timeCost}" /></a></p>
+                            <div class="timeline-event timeline-event-default">
+                                <div class="timeline-heading">
+                                    <a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.start})"><h4><c:out value="${onePath.initial}" /></h4></a>
                                 </div>
-                    </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.end})"><c:out value="${onePath.destination}" /></a></div>
-                        <div class="card-block">
-                            <p class="card-text"><c:out value="${onePath.endPointDescription}"/></p>
+                                <div class="timeline-body">
+                                    <p><c:out value="${onePath.startPointDescription}"/></p>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                    <span class="timeline-label">
+                        <span class="label label-primary"><a href="#" onclick="travelDetail(${loop.index + 1}, ${onePath.start}, ${onePath.end})">TimeCost: <c:out value="${onePath.timeCost}" /></a></span>
+                    </span>
+                    <div class="timeline-item">
+                        <div class="timeline-point timeline-point-default">
+                            <i class="fa fa-circle"></i>
+                        </div>
+                        <div class="timeline-event timeline-event-default">
+                            <div class="timeline-heading">
+                                <a href="#" onclick="toggleBounce(${loop.index + 1}, ${onePath.end})"><h4><c:out value="${onePath.initial}" /></h4></a>
+                            </div>
+                            <div class="timeline-body">
+                                <p><c:out value="${onePath.endPointDescription}"/></p>
+                            </div>
                         </div>
                     </div>
                 </c:forEach>
             <hr>
+                </div>
                </c:forEach>
             <!-- /item list -->
             </div>
